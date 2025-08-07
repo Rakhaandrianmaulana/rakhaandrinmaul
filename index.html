@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RakhaStore AI</title>
+    <!-- Tailwind CSS for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* Custom styles for the theme */
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #f8f9fa; /* Light text color */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .background-blur {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://qu.ax/svJbw.jpeg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(10px);
+            z-index: -1;
+            transform: scale(1.1); /* Ensure blur covers edges */
+        }
+        .content-wrapper {
+            background-color: rgba(17, 24, 39, 0.8); /* Dark semi-transparent background */
+            backdrop-filter: blur(5px); /* Additional blur layer for content */
+        }
+        .card {
+            background-color: rgba(31, 41, 55, 0.7); /* Card background */
+            border: 1px solid rgba(239, 68, 68, 0.3); /* Red accent border */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(239, 68, 68, 0.2), 0 10px 10px -5px rgba(239, 68, 68, 0.1);
+        }
+        .btn-cyber {
+            background-color: #ef4444; /* Red-500 */
+            color: white;
+            font-weight: bold;
+            border: 2px solid #ef4444;
+            box-shadow: 0 0 5px #ef4444, 0 0 10px #ef4444;
+            transition: all 0.3s ease;
+        }
+        .btn-cyber:hover {
+            background-color: #dc2626; /* Red-600 */
+            box-shadow: 0 0 10px #ef4444, 0 0 20px #ef4444;
+        }
+        /* Chatbot styles */
+        #chat-popup {
+            display: none;
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 90%;
+            max-width: 350px;
+            height: 500px;
+            border: 2px solid #ef4444;
+            border-radius: 1rem;
+            z-index: 1000;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+        #chat-toggle-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999;
+        }
+        .chat-bubble {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 15px;
+        }
+        .user-bubble {
+            background-color: #ef4444;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+        .ai-bubble {
+            background-color: #374151; /* Gray-700 */
+            color: white;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+        /* Star rating */
+        .star-rating input[type="radio"] { display: none; }
+        .star-rating label {
+            font-size: 2rem;
+            color: #4b5563; /* Gray-600 */
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .star-rating input[type="radio"]:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #f59e0b; /* Amber-500 */
+        }
+    </style>
+</head>
+<body class="bg-gray-900">
+    <!-- Background with blur effect -->
+    <div class="background-blur"></div>
+
+    <!-- Background Audio -->
+    <audio id="background-audio" src="https://files.catbox.moe/3yeu0x.mp3" loop autoplay></audio>
+
+    <div class="content-wrapper min-h-screen">
+        <div class="container mx-auto px-4 py-12">
+            <!-- Header -->
+            <header class="text-center mb-16">
+                <h1 class="text-4xl md:text-6xl font-black tracking-tight text-white uppercase">
+                    RakhaStore <span class="text-red-500">AI</span>
+                </h1>
+                <p class="mt-2 text-lg md:text-xl text-gray-300">Powered by Rakha-AI</p>
+            </header>
+
+            <!-- Product Section -->
+            <main>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Product 1 -->
+                    <div class="card rounded-xl p-8 flex flex-col items-center text-center">
+                        <i class="fas fa-users text-5xl text-red-500 mb-4"></i>
+                        <h2 class="text-2xl font-bold mb-2">100 Perak per Follower</h2>
+                        <p class="text-gray-400 mb-6">Tingkatkan audiens Anda dengan cepat dan efisien. Kualitas terjamin.</p>
+                        <button onclick="checkout('follower')" class="btn-cyber w-full py-3 rounded-lg">Checkout</button>
+                    </div>
+
+                    <!-- Product 2 -->
+                    <div class="card rounded-xl p-8 flex flex-col items-center text-center">
+                        <i class="fas fa-code text-5xl text-red-500 mb-4"></i>
+                        <h2 class="text-2xl font-bold mb-2">SC Assain</h2>
+                        <p class="text-gray-400 mb-6">Dapatkan script premium Assain untuk kebutuhan development Anda.</p>
+                        <button onclick="checkout('sc-assain')" class="btn-cyber w-full py-3 rounded-lg">Checkout</button>
+                    </div>
+
+                    <!-- Product 3 -->
+                    <div class="card rounded-xl p-8 flex flex-col items-center text-center">
+                        <i class="fas fa-handshake text-5xl text-red-500 mb-4"></i>
+                        <h2 class="text-2xl font-bold mb-2">Reseller SC Assain</h2>
+                        <p class="text-gray-400 mb-6">Jadilah partner kami dan dapatkan keuntungan dari penjualan SC Assain.</p>
+                        <button onclick="checkout('reseller-sc-assain')" class="btn-cyber w-full py-3 rounded-lg">Checkout</button>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Feedback Section -->
+            <section id="feedback-section" class="mt-24 max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-8">Kritik & Saran</h2>
+                <form id="feedback-form" class="card rounded-xl p-8 space-y-6">
+                    <div>
+                        <label class="block text-lg font-medium mb-2 text-center">Beri Rating</label>
+                        <div class="star-rating flex flex-row-reverse justify-center items-center">
+                            <input type="radio" id="star5" name="rating" value="5" required/><label for="star5" title="5 stars">★</label>
+                            <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars">★</label>
+                            <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars">★</label>
+                            <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 stars">★</label>
+                            <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star">★</label>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="comment" class="block text-lg font-medium mb-2">Komentar Anda</label>
+                        <textarea id="comment" name="comment" rows="4" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-600 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition" placeholder="Tuliskan masukan Anda di sini..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-cyber w-full py-3 rounded-lg">Kirim</button>
+                </form>
+
+                <!-- Display Feedback -->
+                <div id="feedback-display" class="mt-12">
+                    <h3 class="text-2xl font-bold text-center mb-6">Ulasan Pengguna</h3>
+                    <div id="feedback-list" class="space-y-4">
+                        <!-- Feedback items will be injected here by JavaScript -->
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Chatbot -->
+    <button id="chat-toggle-btn" onclick="toggleChat()" class="btn-cyber rounded-full w-16 h-16 flex items-center justify-center text-3xl">
+        <i class="fas fa-robot"></i>
+    </button>
+    <div id="chat-popup" class="flex flex-col bg-gray-900 content-wrapper">
+        <div class="p-4 bg-gray-800 flex justify-between items-center rounded-t-lg border-b-2 border-red-500">
+            <h3 class="font-bold text-lg">Chat dengan Rakha-AI</h3>
+            <button onclick="toggleChat()" class="text-gray-400 hover:text-white">&times;</button>
+        </div>
+        <div id="chat-window" class="flex-1 p-4 overflow-y-auto flex flex-col gap-3">
+            <!-- Chat messages will appear here -->
+             <div class="chat-bubble ai-bubble">
+                Halo! Saya Rakha-AI. Ada yang bisa saya bantu?
+            </div>
+        </div>
+        <div class="p-4 border-t border-gray-700">
+            <div id="chat-loading" class="text-center text-sm text-gray-400 mb-2" style="display: none;">
+                Rakha-AI sedang mengetik...
+            </div>
+            <div class="flex gap-2">
+                <input type="text" id="chat-input" class="flex-1 p-3 rounded-lg bg-gray-800 border border-gray-600 focus:ring-2 focus:ring-red-500 focus:border-red-500 transition" placeholder="Ketik pesan Anda...">
+                <button onclick="sendMessage()" class="btn-cyber px-5 rounded-lg">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Link to JavaScript file -->
+    <script src="function.js"></script>
+</body>
+</html>
